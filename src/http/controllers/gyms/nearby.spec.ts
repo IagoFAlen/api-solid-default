@@ -12,9 +12,9 @@ describe('Search Gym (e2e)', () => {
 		await app.close()
 	})
 	
-	it('should be able to search a gym by title', async () => {
+	it('should be able to list nearby gyms', async () => {
 		const { token } = await createAndAuthenticateUser(app)
-		
+
 		await request(app.server).post('/gyms').set('Authorization', `Bearer ${token}`).send({
 			title: 'JavaScript Gym',
 			description: 'Some description.',
@@ -27,13 +27,16 @@ describe('Search Gym (e2e)', () => {
 			title: 'TypeScript Gym',
 			description: 'Some description.',
 			phone: '11999999999',
-			latitude: 1,
-			longitude: 1,
+			latitude: -27.2092052,
+			longitude: -49.6401091,
 		})
 		
         const response = await request(app.server)
-                                            .get('/gyms/search')
-                                            .query({ q: 'JavaScript'})
+                                            .get('/gyms/nearby')
+                                            .query({
+                                                latitude: 0,
+                                                longitude: 0
+                                            })
                                             .set('Authorization', `Bearer ${token}`)
                                             .send()
 
